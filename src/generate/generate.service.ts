@@ -15,7 +15,7 @@ export class GenerateService {
 
     async generate(article: string): Promise<string> {
         const dialogue = await this.llmService.generateDialogue(article);
-
+        console.log(dialogue);
         const lines = dialogue.split('\n').filter(Boolean);
         const audioPaths: string[] = [];
 
