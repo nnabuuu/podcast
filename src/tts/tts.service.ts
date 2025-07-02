@@ -23,6 +23,7 @@ export class TtsService {
     };
 
     async speak(text: string, voice: 'voice1' | 'voice2', index: number): Promise<string> {
+        console.log(`${voice}: ${text}`);
         const response = await axios.post(
             `https://api.elevenlabs.io/v1/text-to-speech/${this.VOICES[voice]}`,
             {

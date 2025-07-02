@@ -21,7 +21,7 @@ export class GenerateService {
 
         for (let i = 0; i < lines.length; i++) {
             const [speaker, content] = lines[i].split(': ');
-            const voice = speaker.includes('Amy') ? 'voice1' : 'voice2';
+            const voice = speaker.includes('[Amy]') ? 'voice1' : 'voice2';
             const audioPath = await this.ttsService.speak(content, voice, i);
             audioPaths.push(audioPath);
         }
