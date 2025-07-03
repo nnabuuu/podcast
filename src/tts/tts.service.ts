@@ -22,7 +22,7 @@ export class TtsService {
         voice2: 'YOUR_VOICE_ID_2',
     };
 
-    async speak(text: string, voice: 'voice1' | 'voice2', index: number): Promise<string> {
+    async speak(text: string, voice: 'voice1' | 'voice2', index: number, dir: string): Promise<string> {
         console.log(`${voice}: ${text}`);
         const response = await axios.post(
             `https://api.elevenlabs.io/v1/text-to-speech/${this.VOICES[voice]}`,
@@ -40,7 +40,8 @@ export class TtsService {
             },
         );
 
-        const filePath = path.join(__dirname, `../../tmp/part-${index}.mp3`);
+        fs.mkdirSync(dir, { recursive: true });
+        const filePath = path.join(dir, `part-${index}.mp3`);
         fs.writeFileSync(filePath, response.data);
         return filePath;
     }
