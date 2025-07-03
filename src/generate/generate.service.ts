@@ -13,8 +13,8 @@ export class GenerateService {
         private readonly ttsService: TtsService,
     ) {}
 
-    async generate(article: string): Promise<string> {
-        const dialogue = await this.llmService.generateDialogue(article);
+    async generate(article: string, language: string): Promise<string> {
+        const dialogue = await this.llmService.generateDialogue(article, language);
         console.log(dialogue);
         const lines = dialogue.split('\n').filter(Boolean);
         const audioPaths: string[] = [];

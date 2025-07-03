@@ -10,7 +10,8 @@ export class GenerateController {
 
     @Post()
     async generatePodcast(@Body() dto: GenerateDto, @Res() res: Response) {
-        const filePath = await this.generateService.generate(dto.article);
+        const lang = dto.language ?? 'en';
+        const filePath = await this.generateService.generate(dto.article, lang);
         res.download(filePath, 'podcast.mp3');
     }
 }
