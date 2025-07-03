@@ -1,5 +1,5 @@
 // src/llm/llm.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 
@@ -8,6 +8,7 @@ export class LlmService {
 
     constructor(private configService: ConfigService) {
     }
+    private readonly logger = new Logger(LlmService.name);
     private readonly openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY,
     });
@@ -47,7 +48,9 @@ Be engaging and natural.`;
             model: 'gpt-4',
             messages: [{ role: 'user', content: prompt }],
         });
+        const content = res.choices[0].message?.content || '';
+        this.logger.log(`OpenAI response: ${content}`);
 
-        return res.choices[0].message?.content || '';
+        return content;
     }
 }

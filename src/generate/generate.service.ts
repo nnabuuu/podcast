@@ -1,5 +1,5 @@
 // src/generate/generate.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { LlmService } from '../llm/llm.service';
 import { TtsService } from '../tts/tts.service';
 import { concatAudioFiles } from '../utils/audio-utils';
@@ -12,15 +12,17 @@ export class GenerateService {
         private readonly llmService: LlmService,
         private readonly ttsService: TtsService,
     ) {}
+    private readonly logger = new Logger(GenerateService.name);
 
     async generate(article: string, language: string): Promise<string> {
-        const dialogue = await this.llmService.generateDialogue(article, language);
-        console.log(dialogue);
-        const lines = dialogue.split('\n').filter(Boolean);
-
         const baseDir = path.join(__dirname, '../../output');
         const taskDir = path.join(baseDir, `${Date.now()}`);
         fs.mkdirSync(taskDir, { recursive: true });
+
+        const dialogue = await this.llmService.generateDialogue(article, language);
+        this.logger.log(`Dialogue generated:\n${dialogue}`);
+        fs.writeFileSync(path.join(taskDir, 'dialogue.txt'), dialogue);
+        const lines = dialogue.split('\n').filter(Boolean);
 
         const audioPaths: string[] = [];
 
